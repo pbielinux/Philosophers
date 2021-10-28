@@ -1,3 +1,6 @@
 [submodule "includes/libft"]
 	path = includes/libft
 	url = https://github.com/pbielinux/libft.git
+[submodule "include/libft"]
+	path = include/libft
+	url = https://github.com/pbielinux/libft.git
