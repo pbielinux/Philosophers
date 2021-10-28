@@ -1,115 +1,108 @@
-# COLORS
-GREEN = \033[0;32m
-GREENGREEN = \033[38;5;46m
+# Variables for colors
+GRN = \033[0;32m
+GRNGRN = \033[38;5;46m
 RED = \033[0;31m
 BLUE = \033[0;34m
-GREY = \033[38;5;240m
-RESET = \033[0m
+RST = \033[0m
 
-NAME	=	philosophers
+project 			 := philosophers
 
-LIBFT	=	includes/libft
+# Variables for path s of source, header
+inc_dir 			 := ./include
+src_dir 			 := ./src
+libft_dir 			 := ${inc_dir}/libft
+sources 			 := $(wildcard ${src_dir}/*.c)
 
-HEADERS	=	headers
+# Variables for paths of object file and binary targets
+build_dir   		 := ./build
+obj_dir 			 := ${build_dir}/obj
+bin_dir 			 := ${build_dir}/bin
+executable 			 := ${bin_dir}/${project}
+build_dirs 			 := ${obj_dir} ${bin_dir}
+objects 			 := $(subst .c,.o,$(subst ${src_dir},${obj_dir},${sources}))
 
-DIR_S	=	srcs
+# C Compiler Configuration
+CC      			 := gcc # Using gcc compiler (alternative: clang)
+CFLAGS				 := -I${inc_dir} -I${libft_dir}/include -g -Wall -Werror -Wextra -std=c11 -O0
+# CFLAGS options:
+# -g 			Compile with debug symbols in binary files
+# -Wall 		Warnings: all - display every single warning
+# -std=c11  	Use the C2011 feature set
+# -I${inc_dir}  Look in the include directory for include files
+# -O0 			Disable compilation optimizations
 
-DIR_O	=	obj
+LIBS				 := -L${libft_dir} -lft
 
-O_SRCS	:=	srcs/main.c \
-			srcs/fractals/mandelbrot.c \
-			srcs/fractals/burning_ship.c \
-			srcs/fractals/julia.c \
-			srcs/fractals/fractal.c \
-			srcs/core/core.c \
-			srcs/core/loop.c \
-			srcs/core/buffer.c \
-			srcs/core/render.c \
-			srcs/core/utils.c \
-			srcs/core/memory_utils.c \
-			srcs/core/exit_error.c \
-			srcs/context/context.c \
-			srcs/context/viewport.c \
-			srcs/context/pixel.c \
-			srcs/context/palette.c \
-			srcs/context/color.c \
-			srcs/context/gui.c \
-			srcs/control/mouse_control.c \
-			srcs/control/keyboard_control.c
+# Splint Configuration
+SPLINT_FLAGS 		:= +charint +charintliteral
 
+# Phony rules do not create artifacts but are usefull workflow
+.PHONY: all run debug lint clean re fclean
+.PHONY: leak-check help variables path-to-bin
 
-SRCS	:=	$(O_SRCS)
+# all is the default goal
+all: ${executable}
 
-B_SRCS	:=	$(O_SRCS)
+# help: Display useful goals in this Makefile
+help:
+	@echo "Try one of the following make goals:"
+	@echo " * all - build project"
+	@echo " * run - execute the project"
+	@echo " * debug - begin a gdb process for the executable"
+	@echo " * leak-check - begin a valgrind memory leak test"
+	@echo " * clean - delete build files in project"
+	@echo " * variables - print Makefile's variables"
 
-OBJS	:= $(SRCS:%.c=$(DIR_O)/%.o)
+# Execute the project's binary file
+run: ${executable}
+	@${^}
 
-BOBJS	:= $(B_SRCS:%.c=$(DIR_O)/%.o)
+# Build the project by combining all object files
+${executable}: ${objects} | ${bin_dir}
+	@${CC} ${CFLAGS} -o ${@} ${^} ${LIBS}
+	@echo "\n[$(GRNGRN) PHILO $(RST)]: Compiled!"
+#	@echo "$(GRNGRN)"
+#	@cat ./include/graphic_assets/logo
+#	@cat ./include/graphic_assets/done
+	@echo "\n"
 
-SUB_DIR_O := $(shell find $(DIR_S) -type d)
-SUB_DIR_O := $(SUB_DIR_O:%=$(DIR_O)/%)
+# Build object files from sources in a template pattern
+${obj_dir}/%.o: ${src_dir}/%.c | ${obj_dir}
+	@${CC} ${CFLAGS} -c -o ${@} ${<}
+	@echo "$(GRN)/$(RST)\c"
 
-DEPS	=	$(HEADERS)/core_utils.h \
-			$(HEADERS)/fractol.h \
-			$(HEADERS)/types.h \
-			$(HEADERS)/macos_keys.h \
-			$(HEADERS)/terminal_colors.h
+# The build directories should be recreated when prerequisite
+${build_dirs}:
+	@mkdir -p ${@}
+	@test -s ${libft_dir}/libft.a || make -C ${libft_dir}
 
-CC		=	gcc
+# Start a gdb process for the binary
+debug: ${executable}
+	gdb ${^}
 
-# Change optimization flag to -O3 for faster execution
-CFLAGS	=	-O3 -Wall -Wextra -Werror
+# Run static analysis to find issues
+lint:
+	splint ${SPLINT_FLAGS} -I${inc_dir} ${sources}
 
-# Linux Libs
-# LIBS	=	-lm -L./libft -lft -lmlx -lX11 -lbsd -lXext
-# MLX		=	includes/mlx_linux
+# Start a valgrind process
+leak-check: ${executable}
+	valgrind --leak-check=full ${^}
 
-# Mac Libs
-LIBS	=	-lm -L./$(LIBFT) -lft -lmlx -framework OpenGL -framework AppKit
-MLX		=	includes/mlx_macos
-
-RM		=	rm -f
-
-INCLUDES	= -I/$(LIBFT)/ -I/headers/
-
-$(DIR_O)/%.o: %.c
-	@mkdir -p $(DIR_O)
-	@mkdir -p $(SUB_DIR_O)
-	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
-	@echo "$(GREEN)//$(RESET)\c"
-
-$(NAME):	libft mlx $(DEPS) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
-	@echo "\n\n[$(GREENGREEN)$(NAME)$(RESET)]: $(NAME) was created\n$(GREENGREEN)"
-	@cat includes/graphic_assets/logo
-
-all:		$(NAME)
-
-libft:
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: Creating $(LIBFT)...$(RESET)"
-	@make -C $(LIBFT)
-
-mlx:
-	@echo "$(RESET)[$(GREENGREEN)Fract-ol$(RESET)]: Creating MLX...$(GREY)"
-	@make -C $(MLX)
-	@echo "$(RESET)[$(GREENGREEN)Fract-ol$(RESET)]: MLX Objects were created\n"
-
+# clean: Delete all artifacts produced in the build process
 clean:
-	@make -C $(LIBFT) clean
-	@make -C $(MLX) clean
-	@rm -rf $(DIR_O)
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: $(RED)Objects Directory was deleted$(RESET)"
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: $(RED)Object Files were deleted$(RESET)"
+	@echo "\n[$(GRNGRN) PHILO $(RST)]: $(RED)Objects and Executable were removed!$(RST)"
+	@rm -rf ${build_dir}
 
-fclean:	clean
-	@rm -f $(MLX)/mlx.a
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: $(RED)$(MLX) was deleted$(RESET)"
-	@rm -f $(LIBFT)/libft.a
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: $(RED)$(LIBFT) was deleted$(RESET)"
-	@rm -f $(NAME)
-	@echo "[$(GREENGREEN)Fract-ol$(RESET)]: $(RED)$(NAME) was deleted$(RESET)\n"
+fclean: clean
+	@make clean -C ${libft_dir}
 
-re:			fclean all
+re: fclean all
 
-
-.PHONY:		all clean fclean cubclean re bonus
+# variables: Print variables in this Makefile for Makefile debugging
+variables:
+	@echo "Sources: ${sources}"
+	@echo "Executable: ${executable}"
+	@echo "Build Dirs: ${build_dirs}"
+	@echo "Objects: ${objects}"
+	@echo "C Compiler: ${CC}"
+	@echo "C Compiler Flags: ${CFLAGS}"
