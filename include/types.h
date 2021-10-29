@@ -13,7 +13,7 @@ typedef enum e_philo_state
 	thinking,
 	eating,
 	sleeping
-}	t_philo_state;
+}	e_philo_state;
 
 typedef struct timeval t_timeval;
 typedef struct s_timings
@@ -34,19 +34,21 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	uint8_t			id;
-	t_philo_state	state;
+	e_philo_state	state;
 	uint16_t		meals_taken;
+	t_timeval		last_meal;
 	t_fork			*fork_left;
 	t_fork			*fork_right;
 }	t_philo;
 
-typedef struct s_philo_data
+typedef struct s_environment
 {
 	uint8_t			nb_of_philo;
-	t_philo			*philo;
+	t_timings		timings;
+	t_philo			*philo_tab;
 	pthread_t		*philo_threads;
 	t_fork			*forks;
 	pthread_mutex_t	*printer_mutex;
-}	t_philo_data;
+}	t_env;
 
 #endif // !TYPES_H
