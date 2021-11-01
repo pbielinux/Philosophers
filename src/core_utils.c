@@ -14,9 +14,9 @@ int	next(int i, int size)
 	return (i + 1);
 }
 
-t_philo_data	*get_philo_data(t_philo_data *data)
+t_env	*get_philo_data(t_env *data)
 {
-	static t_philo_data *static_data = NULL;
+	static t_env *static_data = NULL;
 
 	if (!static_data && data)
 		static_data = data;
