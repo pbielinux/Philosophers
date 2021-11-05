@@ -22,7 +22,7 @@ typedef struct s_timings
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;
-	int16_t		meals_to_take;
+	int			meals_to_take;
 }	t_timings;
 
 typedef struct s_fork
@@ -33,9 +33,9 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	uint8_t			id;
+	int			id;
 	e_philo_state	state;
-	uint16_t		meals_taken;
+	int				meals_taken;
 	t_timeval		last_meal;
 	t_fork			*fork_left;
 	t_fork			*fork_right;
@@ -43,7 +43,7 @@ typedef struct s_philo
 
 typedef struct s_environment
 {
-	uint8_t			nb_of_philo;
+	int				nb_of_philo;
 	t_timings		timings;
 	t_philo			*philo_tab;
 	pthread_t		*philo_threads;

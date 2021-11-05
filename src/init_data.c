@@ -2,7 +2,7 @@
 
 static t_philo		*init_philo(t_env *env);
 static t_timings	init_timings(int argc, char **argv);
-static t_fork		*init_forks(uint8_t nb_forks);
+static t_fork		*init_forks(int nb_forks);
 
 t_env	init_env_struct(int argc, char **argv)
 {
@@ -16,7 +16,7 @@ t_env	init_env_struct(int argc, char **argv)
 	return (env);
 }
 
-static t_fork	*init_forks(uint8_t nb_forks)
+static t_fork	*init_forks(int nb_forks)
 {
 	size_t	i;
 	t_fork	*forks;
@@ -24,7 +24,7 @@ static t_fork	*init_forks(uint8_t nb_forks)
 	forks = malloc(sizeof(t_fork) * nb_forks);
 	omm_guard(forks, __FILE__, __LINE__);
 	i = -1;
-	while (++i < nb_forks)
+	while (++i < (size_t)nb_forks)
 	{
 		forks[i].mutex = malloc(sizeof(pthread_mutex_t));
 		omm_guard(forks[i].mutex, __FILE__, __LINE__);
@@ -54,7 +54,7 @@ static t_timings	init_timings(int argc, char **argv)
 static t_philo	*init_philo(t_env *env)
 {
 	t_philo	*philo_tab;
-	uint8_t	i;
+	int	i;
 
 	philo_tab = malloc(sizeof(t_philo) * env->nb_of_philo);
 	omm_guard(philo_tab, __FILE__, __LINE__);
