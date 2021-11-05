@@ -64,7 +64,7 @@ ${executable}: ${objects} | ${bin_dir}
 #	@echo "$(GRNGRN)"
 #	@cat ./include/graphic_assets/logo
 #	@cat ./include/graphic_assets/done
-	@echo "\n"
+#	@echo "\n"
 
 # Build object files from sources in a template pattern
 ${obj_dir}/%.o: ${src_dir}/%.c | ${obj_dir}

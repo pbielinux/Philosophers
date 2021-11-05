@@ -13,6 +13,7 @@ t_env	init_env_struct(int argc, char **argv)
 	env.printer_mutex = init_printer_mutex();
 	env.timings = init_timings(argc, argv);
 	env.philo_tab = init_philo(&env);
+	env.philo_threads = malloc(sizeof(pthread_t) * env.nb_of_philo);
 	return (env);
 }
 
@@ -46,8 +47,7 @@ static t_timings	init_timings(int argc, char **argv)
 		timing.meals_to_take = ft_atoi(argv[5]);
 	else
 		timing.meals_to_take = UNSET;
-	if (gettimeofday(&timing.start_time, NULL) < 0)
-		exit(EXIT_FAILURE);
+	timing.start_time = ft_get_timeval();
 	return (timing);
 }
 
@@ -67,6 +67,8 @@ static t_philo	*init_philo(t_env *env)
 		philo_tab[i].last_meal = env->timings.start_time;
 		philo_tab[i].fork_left = &env->forks[previous(i, env->nb_of_philo)];
 		philo_tab[i].fork_right = &env->forks[i];
+		philo_tab[i].printer_mutex = env->printer_mutex;
+		philo_tab[i].timings = &env->timings;
 	}
 	return (philo_tab);
 }
