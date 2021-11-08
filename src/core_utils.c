@@ -6,7 +6,7 @@
 /*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:04:01 by pbielik           #+#    #+#             */
-/*   Updated: 2021/11/08 19:43:33 by pbielik          ###   ########.fr       */
+/*   Updated: 2021/11/08 19:59:27 by pbielik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_exit_and_free(void)
 	exit(EXIT_SUCCESS);
 }
 
-void	ft_exit_error(error_code error)
+void	ft_exit_error(t_error_code error)
 {
 	if (error == THREAD_CREATION)
 		printf(RED"Failed to create thread!"RST);

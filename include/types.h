@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   types.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/08 19:56:37 by pbielik           #+#    #+#             */
+/*   Updated: 2021/11/08 19:59:06 by pbielik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TYPES_H
 # define TYPES_H
 
@@ -12,9 +24,8 @@ typedef enum e_error_code
 	THREAD_CREATION,
 	MUTEX_CREATION,
 	THREAD_JOIN,
-	GET_TIME,
-
-}	error_code;
+	GET_TIME
+}	t_error_code;
 
 typedef enum e_philo_state
 {
@@ -23,9 +34,9 @@ typedef enum e_philo_state
 	sleeping,
 	thinking,
 	dead
-}	e_philo_state;
+}	t_philo_state;
 
-typedef struct timeval t_timeval;
+typedef struct timeval	t_timeval;
 typedef struct s_timings
 {
 	t_timeval	start_time;
@@ -44,7 +55,7 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	int				id;
-	e_philo_state	state;
+	t_philo_state	state;
 	int				meals_taken;
 	t_timeval		last_meal;
 	t_fork			*fork_left;

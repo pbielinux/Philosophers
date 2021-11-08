@@ -6,13 +6,13 @@
 /*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:04:23 by pbielik           #+#    #+#             */
-/*   Updated: 2021/11/08 19:29:41 by pbielik          ###   ########.fr       */
+/*   Updated: 2021/11/08 19:59:48 by pbielik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static char	*get_state_str(e_philo_state state)
+static char	*get_state_str(t_philo_state state)
 {
 	if (state == forks_taken)
 		return (BLU"has taken forks");

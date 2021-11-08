@@ -10,7 +10,6 @@ project 			 := philosophers
 # Variables for path s of source, header
 inc_dir 			 := ./include
 src_dir 			 := ./src
-libft_dir 			 := ${inc_dir}/libft
 sources 			 := $(wildcard ${src_dir}/*.c)
 
 # Variables for paths of object file and binary targets
@@ -23,15 +22,13 @@ objects 			 := $(subst .c,.o,$(subst ${src_dir},${obj_dir},${sources}))
 
 # C Compiler Configuration
 CC      			 := gcc # Using gcc compiler (alternative: clang)
-CFLAGS				 := -I${inc_dir} -I${libft_dir}/include -g -Wall -Werror -Wextra -std=c11 -O0
+CFLAGS				 := -I${inc_dir} -g -Wall -Werror -Wextra -std=c11 -O0
 # CFLAGS options:
 # -g 			Compile with debug symbols in binary files
 # -Wall 		Warnings: all - display every single warning
 # -std=c11  	Use the C2011 feature set
 # -I${inc_dir}  Look in the include directory for include files
 # -O0 			Disable compilation optimizations
-
-LIBS				 := -L${libft_dir} -lft
 
 # Splint Configuration
 SPLINT_FLAGS 		:= +charint +charintliteral
@@ -59,7 +56,7 @@ run: ${executable}
 
 # Build the project by combining all object files
 ${executable}: ${objects} | ${bin_dir}
-	@${CC} ${CFLAGS} -o ${@} ${^} ${LIBS}
+	@${CC} ${CFLAGS} -o ${@} ${^}
 	@echo "\n[$(GRNGRN) PHILO $(RST)]: Compiled!"
 #	@echo "$(GRNGRN)"
 #	@cat ./include/graphic_assets/logo
@@ -74,7 +71,6 @@ ${obj_dir}/%.o: ${src_dir}/%.c | ${obj_dir}
 # The build directories should be recreated when prerequisite
 ${build_dirs}:
 	@mkdir -p ${@}
-	@test -s ${libft_dir}/libft.a || make -C ${libft_dir}
 
 # Start a gdb process for the binary
 debug: ${executable}
@@ -94,7 +90,6 @@ clean:
 	@rm -rf ${build_dir}
 
 fclean: clean
-	@make clean -C ${libft_dir}
 
 re: fclean all
 
