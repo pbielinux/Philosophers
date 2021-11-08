@@ -12,9 +12,10 @@
 # include "core_utils.h"
 # include "time_utils.h"
 # include "debug_utils.h"
-# include "init_data.h"
+# include "init_env.h"
 # include "forks.h"
-# include "init_threads.h"
+# include "threads.h"
+# include "routine.h"
 # include "printer.h"
 
 #endif // PHILO_H

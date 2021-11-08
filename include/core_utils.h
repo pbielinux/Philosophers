@@ -3,12 +3,14 @@
 
 # include "types.h"
 
-void			print_usage_and_exit(void);
-
 t_env	*get_philo_data(t_env *data);
 
-int	next(int i, int size);
+void	print_usage_and_exit(void);
 
-int	previous(int i, int size);
+void	ft_exit_and_free(void);
+
+void	ft_exit_error(error_code error);
+
+int		previous(int i, int size);
 
 #endif // !CORE_UTILS_H

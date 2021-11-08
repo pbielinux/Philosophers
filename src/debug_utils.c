@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/08 19:04:09 by pbielik           #+#    #+#             */
+/*   Updated: 2021/11/08 19:14:51 by pbielik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static long	db_get_time_last_meal(t_timeval curr_time, t_timeval last_meal)
@@ -6,7 +18,7 @@ static long	db_get_time_last_meal(t_timeval curr_time, t_timeval last_meal)
 		- (last_meal.tv_sec / 1000 + last_meal.tv_usec * 1000));
 }
 
-static char *db_get_state(int i)
+static char	*db_get_state(int i)
 {
 	if (i == eating)
 		return (MAG" eating "RST);
@@ -18,7 +30,7 @@ static char *db_get_state(int i)
 		return (RED"--dead--"RST);
 }
 
-static char *db_get_fork(t_fork *fork)
+static char	*db_get_fork(t_fork *fork)
 {
 	if (fork->is_busy)
 		return (RED" lock "RST);
@@ -28,14 +40,16 @@ static char *db_get_fork(t_fork *fork)
 
 void	db_print_philos(void)
 {
-	t_env	*env;
+	t_env		*env;
 	t_timeval	curr_time;
+	size_t		i;
 
 	curr_time = ft_get_timeval();
 	env = get_philo_data(NULL);
 	printf("---------------------------------------------------------------\n");
-	printf("\t      |   State   |   Meals   |   Lst Meal   |   LFork | RFork  |\n");	
-	for (int i = 0; i < env->nb_of_philo; i++)
+	printf("\t    |   State   |   Meals   |   Lst Meal   |  LFork | RFork |\n");
+	i = -1;
+	while (++i < env->nb_of_philo)
 	{
 		printf(" Philo[%d]:\t%s\t%d\t%10ld\t%10s\t%10s\n",
 			env->philo_tab[i].id,
@@ -52,7 +66,7 @@ void	db_print_philos(void)
 void	db_print_data(void)
 {
 	t_env	*env;
-	
+
 	env = get_philo_data(NULL);
 	printf(BLU"ENV:\n");
 	printf("nb_of_philo:\t %d\n", env->nb_of_philo);

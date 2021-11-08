@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/08 19:04:15 by pbielik           #+#    #+#             */
+/*   Updated: 2021/11/08 19:26:23 by pbielik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static t_philo		*init_philo(t_env *env);
 static t_timings	init_timings(int argc, char **argv);
-static t_fork		*init_forks(int nb_forks);
 
 t_env	init_env_struct(int argc, char **argv)
 {
@@ -14,26 +25,8 @@ t_env	init_env_struct(int argc, char **argv)
 	env.timings = init_timings(argc, argv);
 	env.philo_tab = init_philo(&env);
 	env.philo_threads = malloc(sizeof(pthread_t) * env.nb_of_philo);
+	omm_guard(env.philo_threads, __FILE__, __LINE__);
 	return (env);
-}
-
-static t_fork	*init_forks(int nb_forks)
-{
-	size_t	i;
-	t_fork	*forks;
-
-	forks = malloc(sizeof(t_fork) * nb_forks);
-	omm_guard(forks, __FILE__, __LINE__);
-	i = -1;
-	while (++i < (size_t)nb_forks)
-	{
-		forks[i].mutex = malloc(sizeof(pthread_mutex_t));
-		omm_guard(forks[i].mutex, __FILE__, __LINE__);
-		if (pthread_mutex_init(forks[i].mutex, NULL) != 0)
-			exit(EXIT_FAILURE);
-		forks[i].is_busy = false;
-	}
-	return (forks);
 }
 
 static t_timings	init_timings(int argc, char **argv)
@@ -54,7 +47,7 @@ static t_timings	init_timings(int argc, char **argv)
 static t_philo	*init_philo(t_env *env)
 {
 	t_philo	*philo_tab;
-	int	i;
+	int		i;
 
 	philo_tab = malloc(sizeof(t_philo) * env->nb_of_philo);
 	omm_guard(philo_tab, __FILE__, __LINE__);

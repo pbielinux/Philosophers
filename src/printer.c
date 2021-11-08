@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   printer.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbielik <pbielik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/08 19:04:23 by pbielik           #+#    #+#             */
+/*   Updated: 2021/11/08 19:29:41 by pbielik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static char	*get_state_str(e_philo_state state)
@@ -29,17 +41,17 @@ void	ft_print_state(t_philo *philo)
 	if (philo->state == dead)
 		a_philo_died = true;
 	if (a_philo_died)
-		philo->state = true;
+		philo->state = dead;
 	pthread_mutex_unlock(philo->printer_mutex);
 }
 
-pthread_mutex_t *init_printer_mutex(void)
+pthread_mutex_t	*init_printer_mutex(void)
 {
 	pthread_mutex_t	*printer_mutex;
 
 	printer_mutex = malloc(sizeof(pthread_mutex_t));
 	omm_guard(printer_mutex, __FILE__, __LINE__);
 	if (pthread_mutex_init(printer_mutex, NULL) != 0)
-		exit(EXIT_FAILURE);
+		ft_exit_error(MUTEX_CREATION);
 	return (printer_mutex);
 }

@@ -7,6 +7,15 @@
 
 # define UNSET -1
 
+typedef enum e_error_code
+{
+	THREAD_CREATION,
+	MUTEX_CREATION,
+	THREAD_JOIN,
+	GET_TIME,
+
+}	error_code;
+
 typedef enum e_philo_state
 {
 	forks_taken,
